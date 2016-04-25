@@ -401,6 +401,11 @@ FORCE_GLACIER_TRANSFER = {
 }
 
 
+CHUNK_SIZE = {'name': 'chunk-size', 'cli_type_name': 'integer',
+             'help_text': (
+                 'The size of each part in a copy transmission, in bytes.')}
+
+
 TRANSFER_ARGS = [DRYRUN, QUIET, INCLUDE, EXCLUDE, ACL,
                  FOLLOW_SYMLINKS, NO_FOLLOW_SYMLINKS, NO_GUESS_MIME_TYPE,
                  SSE, SSE_C, SSE_C_KEY, SSE_KMS_KEY_ID, SSE_C_COPY_SOURCE,
@@ -408,7 +413,8 @@ TRANSFER_ARGS = [DRYRUN, QUIET, INCLUDE, EXCLUDE, ACL,
                  WEBSITE_REDIRECT, CONTENT_TYPE, CACHE_CONTROL,
                  CONTENT_DISPOSITION, CONTENT_ENCODING, CONTENT_LANGUAGE,
                  EXPIRES, SOURCE_REGION, ONLY_SHOW_ERRORS,
-                 PAGE_SIZE, IGNORE_GLACIER_WARNINGS, FORCE_GLACIER_TRANSFER]
+                 PAGE_SIZE, IGNORE_GLACIER_WARNINGS, FORCE_GLACIER_TRANSFER,
+                 CHUNK_SIZE]
 
 
 def get_client(session, region, endpoint_url, verify, config=None):

@@ -65,7 +65,7 @@ class S3Handler(object):
             'only_show_errors': False, 'is_stream': False,
             'paths_type': None, 'expected_size': None, 'metadata': None,
             'metadata_directive': None, 'ignore_glacier_warnings': False,
-            'force_glacier_transfer': False
+            'force_glacier_transfer': False, 'chunk_size': None
         }
         self.params['region'] = params['region']
         for key in self.params.keys():
@@ -73,6 +73,8 @@ class S3Handler(object):
                 self.params[key] = params[key]
         self.multi_threshold = self._runtime_config['multipart_threshold']
         self.chunksize = self._runtime_config['multipart_chunksize']
+        if self.params['chunk_size']:
+            self.chunksize = self.params['chunk_size']
         LOGGER.debug("Using a multipart threshold of %s and a part size of %s",
                      self.multi_threshold, self.chunksize)
         self.executor = Executor(
