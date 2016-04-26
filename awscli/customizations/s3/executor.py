@@ -333,9 +333,9 @@ class PrintThread(threading.Thread):
             key = ':'.join(print_components[1:])
             if key in self._progress_dict:
                 self._progress_dict.pop(print_str, None)
+                self._file_count += 1
             else:
                 self._num_parts += 1
-            self._file_count += 1
 
         # If the message is an error or warning, print it to standard error.
         if print_to_stderr and not self._quiet:
