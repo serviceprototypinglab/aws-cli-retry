@@ -18,7 +18,7 @@ import sys
 
 from awscli.customizations.s3.utils import (
     find_chunksize, adjust_chunksize_to_upload_limits, MAX_UPLOAD_SIZE,
-    find_bucket_key, relative_path, PrintTask, create_warning)
+    find_bucket_key, relative_path, PrintTask, create_warning, human_readable_to_bytes)
 from awscli.customizations.s3.executor import Executor
 from awscli.customizations.s3 import tasks
 from awscli.customizations.s3.transferconfig import RuntimeConfig
@@ -74,7 +74,7 @@ class S3Handler(object):
         self.multi_threshold = self._runtime_config['multipart_threshold']
         self.chunksize = self._runtime_config['multipart_chunksize']
         if self.params['chunk_size']:
-            self.chunksize = self.params['chunk_size']
+            self.chunksize = human_readable_to_bytes(self.params['chunk_size'])
         LOGGER.debug("Using a multipart threshold of %s and a part size of %s",
                      self.multi_threshold, self.chunksize)
         self.executor = Executor(

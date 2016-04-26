@@ -401,7 +401,7 @@ FORCE_GLACIER_TRANSFER = {
 }
 
 
-CHUNK_SIZE = {'name': 'chunk-size', 'cli_type_name': 'integer',
+CHUNK_SIZE = {'name': 'chunk-size',
              'help_text': (
                  'The size of each part in a copy transmission, in bytes.')}
 
