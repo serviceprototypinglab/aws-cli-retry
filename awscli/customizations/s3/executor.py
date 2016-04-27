@@ -360,7 +360,10 @@ class PrintThread(threading.Thread):
         prog_str += "part(s) with %s file(s) remaining" % \
             num_files
         length_prog = len(prog_str)
-        prog_str += '\r'
+        if not os.getenv("AWSRETRYDEBUG"):
+            prog_str += '\r'
+        else:
+            prog_str += '\n'
         prog_str = prog_str.ljust(self._progress_length, ' ')
         self._progress_length = length_prog
         return prog_str
