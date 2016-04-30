@@ -219,7 +219,7 @@ class UploadPartTask(OrderableTask):
         starting_byte = in_file_part_number * self._chunk_size
         return ReadFileChunk(actual_filename, starting_byte, self._chunk_size)
 
-    def __call__(self, attempts=3):
+    def __call__(self, attempts=None):
         LOGGER.debug("Uploading part %s for filename: %s",
                      self._part_number, self._filename.src)
         try:
@@ -258,7 +258,11 @@ class UploadPartTask(OrderableTask):
         except Exception as e:
             if os.getenv("AWSRETRYDEBUG"):
                 print("»» retrypart return code: 1 (part {:d})".format(self._part_number))
-            if attempts > 0:
+            if attempts is None:
+                attempts = 0
+                if os.getenv("AWSRETRY"):
+                    attempts = int(os.getenv("AWSRETRY"))
+            if attempts != 0:
                 if os.getenv("AWSRETRYDEBUG"):
                     print("»» retrypart retry copy ({:d} left)".format(attempts))
                 self.__call__(attempts - 1)
@@ -473,7 +477,7 @@ class CreateMultipartUploadTask(BasicTask):
             session, filename, parameters, result_queue)
         self._upload_context = upload_context
 
-    def __call__(self, attempts=3):
+    def __call__(self, attempts=None):
         LOGGER.debug("Creating multipart upload for file: %s",
                      self.filename.src)
         try:
@@ -483,7 +487,11 @@ class CreateMultipartUploadTask(BasicTask):
         except Exception as e:
             if os.getenv("AWSRETRYDEBUG"):
                 print("»» retrycreate return code: 1 (create)")
-            if attempts > 0:
+            if attempts is None:
+                attempts = 0
+                if os.getenv("AWSRETRY"):
+                    attempts = int(os.getenv("AWSRETRY"))
+            if attempts != 0:
                 if os.getenv("AWSRETRYDEBUG"):
                     print("»» retrycreate retry create ({:d} left)".format(attempts))
                 self.__call__(attempts - 1)
@@ -521,7 +529,7 @@ class CompleteMultipartUploadTask(BasicTask):
             session, filename, parameters, result_queue)
         self._upload_context = upload_context
 
-    def __call__(self, attempts=3):
+    def __call__(self, attempts=None):
         LOGGER.debug("Completing multipart upload for file: %s",
                      self.filename.src)
         upload_id = self._upload_context.wait_for_upload_id()
@@ -539,7 +547,11 @@ class CompleteMultipartUploadTask(BasicTask):
         except Exception as e:
             if os.getenv("AWSRETRYDEBUG"):
                 print("»» retrypart return code: 1 (part last)")
-            if attempts > 0:
+            if attempts is None:
+                attempts = 0
+                if os.getenv("AWSRETRY"):
+                    attempts = int(os.getenv("AWSRETRY"))
+            if attempts != 0:
                 if os.getenv("AWSRETRYDEBUG"):
                     print("»» retrypart retry copy ({:d} left)".format(attempts))
                 self.__call__(attempts - 1)
