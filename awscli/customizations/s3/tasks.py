@@ -573,9 +573,9 @@ class CompleteMultipartUploadTask(BasicTask):
                                       self.parameters['dryrun'])
             result = {'message': message, 'error': False}
             self._upload_context.announce_completed()
+            if os.getenv("AWSRETRYDEBUG"):
+                print("»» retrypart return code: 0 (part last)")
         self.result_queue.put(PrintTask(**result))
-        if os.getenv("AWSRETRYDEBUG"):
-            print("»» retrypart return code: 0 (part last)")
 
 
 class RemoveFileTask(BasicTask):
